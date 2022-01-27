@@ -20,9 +20,12 @@ grn_ice_loss = read.table("data/greenland_mass_200204_202111_staa.txt", skip=31,
 ```{r}
 # View(grn_ice_loss)
 head(ant_ice_loss) #returned the first 6 rows of the table/data frame
+tail(ant_ice_loss)#returned the last 6 rows of the table/data frame
 head(grn_ice_loss)
+tail(grn_ice_loss)#returned the last 6 rows of the table/data frame
 dim(ant_ice_loss)
 summary(ant_ice_loss)
+summary(grn_ice_loss)
 ```
 
 ### plotting data using 'y ~ x'
@@ -86,7 +89,7 @@ lines((mass_Gt+2*sigma_Gt) ~ decimal_date, data=grn_ice_loss_with_NA, type='l', 
 lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=grn_ice_loss_with_NA, type='l', lty='dashed') 
 ```
 
-#Combining Antarctic and Greenland plots into one and saving
+### Combining Antarctic and Greenland plots into one and saving
 
 ```{r}
 pdf('figures/ice_mass_trends.pdf', width=7, height=5)
