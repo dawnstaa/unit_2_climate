@@ -1,0 +1,118 @@
+---
+title: "pracice1_staa"
+author: "dawnstaa"
+date: "1/26/2022"
+output: html_document
+---
+
+
+### Reading the data for Antarctica and Greeenland ice loss
+
+```{r setup, include=FALSE}
+# Antarctica ice mass loss, Gt - gigatonnes
+ant_ice_loss = read.table("data/antarctica_mass_200204_202111_staa.txt", skip=31, sep="", header = FALSE, col.names = c("decimal_date", "mass_Gt", "sigma_Gt")) #last part manually inserts column names after reading header
+# Greenland ice mass loss, Gt - gigatonnes
+grn_ice_loss = read.table("data/greenland_mass_200204_202111_staa.txt", skip=31, sep="", header = FALSE, col.names = c("decimal_date", "mass_Gt", "sigma_Gt"))
+```
+
+### Viewing data and getting general info abt data
+
+```{r}
+# View(grn_ice_loss)
+head(ant_ice_loss) #returned the first 6 rows of the table/data frame
+head(grn_ice_loss)
+dim(ant_ice_loss)
+summary(ant_ice_loss)
+```
+
+### plotting data using 'y ~ x'
+
+```{r}
+# Plot Antarctic ice mass loss
+plot(mass_Gt ~ decimal_date, data=ant_ice_loss, ylab="Antarctica Mass Loss (Gt)")
+# Plot Greenland ice mass loss
+plot(mass_Gt ~ decimal_date, data=grn_ice_loss, ylab="Greenland Mass Loss (Gt)")
+# Plot both together as lines
+plot(mass_Gt ~ decimal_date, data=ant_ice_loss, ylab="Ice Sheet Mass Loss (Gt)", type='l') 
+lines(mass_Gt ~ decimal_date, data=grn_ice_loss, col='cyan') 
+```
+
+
+### Using '+' to link multiple plots and print to the same window
+
+```{r}
+plot(mass_Gt ~ decimal_date, data=ant_ice_loss, ylab="Antarctica Mass Loss (Gt)", type='l', ylim=range(grn_ice_loss$mass_Gt)) +
+lines(mass_Gt ~ decimal_date, data=grn_ice_loss, type='l', col='cyan') 
+```
+
+### Plotting to account for years with missing data
+#### insert an `NA` into the data.frame at the start of 2018. Then add in grey shaded polygons behind it to show the uncertainty
+
+```{r}
+#Create data.frame with an NA between the GRACE missions. Column names must match so it will merge with ant and grn data
+data_break = data.frame(decimal_date=2018.0, mass_Gt=NA, sigma_Gt=NA)
+data_break
+
+#Add NA data point to the Antarctica ice trends data frame
+ant_ice_loss_with_NA = rbind(ant_ice_loss, data_break) # Merge ant_ice_loss data frame with our NA point
+tail(ant_ice_loss_with_NA) # Our NA value in 2018 is now the last row of our data frame
+order(ant_ice_loss_with_NA$decimal_date) # Use order() to list the indices of the data after its sorted from smallest to biggest
+ant_ice_loss_with_NA = ant_ice_loss_with_NA[order(ant_ice_loss_with_NA$decimal_date),] # Reorder the data frame, sorting by date
+
+#Repeating with Greenland data.frame
+grn_ice_loss_with_NA = rbind(grn_ice_loss, data_break) # Merge grn_ice_loss data frame with our NA point
+grn_ice_loss_with_NA = grn_ice_loss_with_NA[order(grn_ice_loss_with_NA$decimal_date),]
+
+#Replotting to show the gap
+plot(mass_Gt ~ decimal_date, data=ant_ice_loss_with_NA, ylab="Antarctica Mass Loss (Gt)", type='l', ylim=range(grn_ice_loss_with_NA$mass_Gt, na.rm=TRUE)) +
+lines(mass_Gt ~ decimal_date, data=grn_ice_loss_with_NA, type='l', col='cyan') 
+```
+### Plotting C.I around data
+#### Sometimes we show errors as "2-sigma", where 2 X sigma represents 95% uncertainty. We can plot 95% confidence intervals around the data by adding and subtracting 2*sigma from the mass loss estimates
+```{r}
+#Antarctica
+head(ant_ice_loss_with_NA)
+plot(mass_Gt ~ decimal_date, data=ant_ice_loss_with_NA, ylab="Antarctica Mass Loss (Gt)", xlab="Year", type='l') +
+lines((mass_Gt+2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') +
+lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') 
+```
+### Exercise 1.1 Creating the above C.I for Greenland
+
+```{r}
+#Greenland Mass loss with 95% confidence interval
+head(grn_ice_loss_with_NA)
+plot(mass_Gt ~ decimal_date, data=grn_ice_loss_with_NA, ylab="Greenland Mass Loss (Gt)", xlab="Year", type='l') +
+lines((mass_Gt+2*sigma_Gt) ~ decimal_date, data=grn_ice_loss_with_NA, type='l', lty='dashed') +
+lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=grn_ice_loss_with_NA, type='l', lty='dashed') 
+```
+
+#Combining Antarctic and Greenland plots into one and saving
+
+```{r}
+pdf('figures/ice_mass_trends.pdf', width=7, height=5)
+plot(mass_Gt ~ decimal_date, data=ant_ice_loss_with_NA, ylab="Ice Sheet Mass Loss (Gt)", xlab="Year", type='l', ylim=range(grn_ice_loss_with_NA$mass_Gt, na.rm=TRUE), lwd=2) +
+lines((mass_Gt+2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') +
+lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') +
+lines(mass_Gt ~ decimal_date, data=grn_ice_loss_with_NA, type='l', col='cyan', lwd=2) +
+lines((mass_Gt+2*sigma_Gt) ~ decimal_date, data=grn_ice_loss_with_NA, type='l', lty='dashed', col="cyan") +
+lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=grn_ice_loss_with_NA, type='l', lty='dashed', col="cyan") 
+dev.off()
+```
+### Bar plot showing the difference in ice mass loss for Antarctica and Greenland
+
+```{r}
+# Largest observed decrease in ice mass loss in Antarctica:
+min(ant_ice_loss$mass_Gt)
+
+# Barplot of largest observed ice loss in Antarctica and Greenland
+barplot(height=c(min(ant_ice_loss$mass_Gt), min(grn_ice_loss$mass_Gt)))
+
+# Flip to negative to positive, add x-axis labels, add more tick marks on y-axis, add y-axis title
+barplot(height=c(min(ant_ice_loss$mass_Gt)*(-1), min(grn_ice_loss$mass_Gt)*(-1)), names.arg=c("Antarctica","Greenland"), ylim=c(0,5000), ylab="Ice loss in Gt")
+```
+
+### Exercise 1.2:
+
+Calculating the average annual ice loss (a.k.a. the annual rate of ice loss) for each ice sheet. Then displaying ice loss rates in a bar graph. Saving bar graph into the `figures/` directory in this repo.
+
+
