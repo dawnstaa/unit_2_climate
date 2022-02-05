@@ -77,7 +77,7 @@ lines(mass_Gt ~ decimal_date, data=grn_ice_loss_with_NA, type='l', col='cyan')
 head(ant_ice_loss_with_NA)
 plot(mass_Gt ~ decimal_date, data=ant_ice_loss_with_NA, ylab="Antarctica Mass Loss (Gt)", xlab="Year", type='l') +
 lines((mass_Gt+2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') +
-lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') 
+lines((mass_Gt-2*sigma_Gt) ~ decimal_date, data=ant_ice_loss_with_NA, type='l', lty='dashed') # use 'lines' instead of plot if you want to keep plotting on the same window/plot
 ```
 ### Exercise 1.1 Creating the above C.I for Greenland
 
@@ -105,8 +105,8 @@ dev.off()
 
 ```{r}
 # Largest observed decrease in ice mass loss in Antarctica:
-min(ant_ice_loss$mass_Gt)
-
+min(ant_ice_loss$mass_Gt, na.rm =TRUE)
+min(grn_ice_loss$mass_Gt, na.rm = TRUE)
 # Barplot of largest observed ice loss in Antarctica and Greenland
 barplot(height=c(min(ant_ice_loss$mass_Gt), min(grn_ice_loss$mass_Gt)))
 
@@ -118,4 +118,6 @@ barplot(height=c(min(ant_ice_loss$mass_Gt)*(-1), min(grn_ice_loss$mass_Gt)*(-1))
 
 Calculating the average annual ice loss (a.k.a. the annual rate of ice loss) for each ice sheet. Then displaying ice loss rates in a bar graph. Saving bar graph into the `figures/` directory in this repo.
 
+```{r}
 
+```

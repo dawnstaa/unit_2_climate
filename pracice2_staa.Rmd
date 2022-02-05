@@ -1,0 +1,130 @@
+---
+title: "practice2_staa"
+author: "dawnstaa"
+date: "2/3/2022"
+output: html_document
+---
+
+### Logical Subsetting
+```{r setup, include=FALSE}
+vec = c(1,0,2,1)
+vec[c(F,F,T,F)] # Every element that matches a TRUE is returned by R
+
+```
+### Logical Tests
+```{r setup, include=FALSE}
+1 > 4
+1 > c(0,1,2) # compares 1 to each element of the vector to see if 1 is greater
+c(1,2,3) == c(3,2,1) #compares 1st elements then 2nd elements and then the 3rd elements (element-wisecomparison)
+
+1 %in% c(3,4,5) # Is 1 in the vector?
+c(8,9) %in% c(32, 9, 4) # Are 8 and 9 in the 2nd vector?
+c(2,4,6,8) %in% c(6,8,10)
+
+```
+### Subsetting a dataframe
+```{r setup, include=FALSE}
+world_oceans = data.frame(oceans = c("Atlantic", "Pacific", "Indian", "Arctic", "Southern"),
+                          area_km2 = c(77e6, 156e6, 69e6, 14e6, 20e6),
+                          avg_depth_m = c(3926, 4028, 3963, 3953, 4500))
+
+world_oceans$avg_depth_m > 4000 # Is the average depth greater than 4000m?
+ # R coerces logicals into numbers if I do math eg., TRUE is 1 and FALSE is 0. sums how many 'TRUES'
+sum(world_oceans$avg_depth_m > 4000) #counts oceans with depth > 4000m
+
+world_oceans$oceans[world_oceans$avg_depth_m > 4000] # Gives the names of oceans that had 'TRUE' as an index for depth > 4000
+world_oceans[world_oceans$avg_depth_m > 4000, ] #gives all the columns of the oceans that returned 'TRUE'  for the depth > 4000 i.e., their names, area and depth as in the dataframe
+summary(world_oceans[world_oceans$avg_depth_m > 4000, ]) # summary of stats on the oceans that returned 'TRUE' for depth > 4000
+
+```
+
+#### Exercise 2.1 creating a vector with visited ocean names
+```{r setup, include=FALSE}
+visited_oceans = c("Atlantic") #creating vector of visited oceans
+visited_oceans %in% world_oceans$oceans# Is my visited ocean in the world_oceans dataframe?
+world_oceans$area_km2[1] #accessing the area of the Atlantic by indexing (just breaking down code to check)
+
+world_oceans$area_km2 < world_oceans$area_km2[1] #oceans with area less than Atlantic
+world_oceans$oceans[world_oceans$area_km2 < world_oceans$area_km2[1]] #getting names of oceans with area less than Atlantic
+Area_lessthan_Atlantic = world_oceans$oceans[world_oceans$area_km2 < world_oceans$area_km2[1]] #Line is too long so assigning a variable to it
+print(Area_lessthan_Atlantic)
+
+visited_oceans %in% Area_lessthan_Atlantic #Is my visited ocean in the oceans with area less than the Atlantic? (It's not cos it's the Atlantic itself:))
+```
+
+### Warning
+```{r}
+1 + 2 == 3
+0.1 + 0.2 == 0.3
+```
+
+### Be Careful
+```{r}
+0.3 - (0.1 + 0.2)  # doesn't == zero due to computer "rounding errors"
+# Change the logical test:
+error_threshold = 0.000001 
+abs(0.3 - (0.1 + 0.2)) < error_threshold
+```
+
+
+### Mistakes using boolean operators
+```{r setup, include=FALSE}
+x = 5
+x > 3 & x < 15
+x > 10 & x < 15 # Both sides need to be true or else R will return 'FALSE'
+x > 10 | x < 15 # only one side needs to be true for R to return 'TRUE'
+x > 10 & x %in% c(1,3,5,7)
+x > 10 | x %in% c(1,3,5,7)
+x > 10 | !(x %in% c(1,3,5,7))# ! 'is not'
+```
+
+### same element-wise execution as in arithmetic
+```{r}
+a = c(1, 2, 3)
+b = c(1, 2, 3)
+c = c(1, 2, 4)
+a == b
+b == c
+a == b & b == c
+```
+### locating a specific ocean based on its specs
+```{r}
+world_oceans$ocean[world_oceans$avg_depth_m > 4000 & world_oceans$area_km2 < 50e6]
+```
+### 'Any' and 'All' 
+```{r}
+z = c(TRUE, TRUE, FALSE)
+any(z)
+all(z)
+```
+### Finding 'NA' in ur data
+```{r}
+NA == NA # doesn't work
+c(1, 2, 3, NA) == NA # so this kind of operation can't work
+
+#This is what works
+is.na(NA)
+vec <- c(1, 2, 3, NA)
+is.na(vec) # Which elements in vec are NA?
+any(is.na(vec)) # Are there any NA's in vec?
+
+```
+
+### Exercise 2.2 Converting text to R code
+```{r}
+w = 15
+x = c(-1, 0, 1)
+y = "February"
+z = c("Monday", "Tuesday", "January")
+
+# so
+w > 10 & w < 20 #Is w greater than 10 and less than 20?
+any(x>0)#Are any of the values in x positive?
+y == "February"#Is object y the word February?
+#How many values in z are days of the week
+
+```
+
+
+
+

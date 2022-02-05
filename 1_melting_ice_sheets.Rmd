@@ -155,5 +155,12 @@ barplot(height=c(min(ant_ice_loss$mass_Gt)*(-1), min(grn_ice_loss$mass_Gt)*(-1))
 
 Calculate the average annual ice loss (a.k.a. the annual rate of ice loss) for each ice sheet by dividing the change in ice lost from the beginning to the end of the time series by the total time that passed. Then display the ice loss rates in a bar graph. Save the bar graph into the `figures/` directory in this repo.
 
+### Answer
+```{r}
+ant_ice_loss$rate_of_loss = ant_ice_loss$mass_Gt/ant_ice_loss$decimal_date
+
+
+```
+
 ***
 

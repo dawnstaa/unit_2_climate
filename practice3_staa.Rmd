@@ -1,0 +1,153 @@
+---
+title: "practice3conditional_statement_staa"
+author: "dawnstaa"
+date: "2/3/2022"
+output: html_document
+---
+### Format
+```{r setup, include=FALSE}
+#if (this) {
+  #that
+#}
+#'this' is the logical statement which returns 'TRUE' or 'FALSE'
+#if 'TRUE' is returned, it implies code (in the braces{} after 'if') rusn as condition was met
+#if 'FALSE' is returned, R skipped the code in the braces and not run it
+```
+
+### Example - if 'num' is negative make it positive
+```{r setup, include=FALSE}
+num = -2 # here num is negative, so code runs and returns a positive number
+if(num < 0) {
+  num = num*-1
+}
+num
+
+num1 = 8 #here num1 is a positive number, so R doesn't run the code and num1 remains the same
+if (num1 < 0){
+  num1 = num1*-1
+}
+num1
+```
+### multiple if-statements
+```{r setup, include=FALSE}
+num = -1
+if (num < 0){
+  print("Hmmm...it's negative.")
+  num = num*-1
+  print("Asa! Now it's positive!")
+}
+num
+```
+### Exercise 3.1 Recording Temperature
+```{r setup, include=FALSE}
+#temp_degC = 36.9  #no fever (Temperature in degrees Celsius)
+#temp_degC = 37.5  #low fever
+temp_degC = 38.9  #high fever
+
+median_human_temp = 37 # median human temperature
+
+#checking for fever
+if (temp_degC > 37.4){
+  diff_frm_median = temp_degC - median_human_temp # difference from median temp
+  print(diff_frm_median)
+  # Checking if fever is high
+  if (temp_degC > 38.3){
+    print ("Oh no! High fever!")
+  } 
+}
+temp_degC
+
+#2nd method - using the diff 4rm the median
+if (temp_degC > 37.4){
+  diff_frm_median = temp_degC - median_human_temp  #difference from median temp
+  print(diff_frm_median)
+  # Checking if fever is high
+  if (diff_frm_median > 1.8){
+    print ("Oh no! High fever!")
+  } 
+}
+temp_degC
+```
+
+
+
+
+
+
+
+
+
+### If_else Statement - What R does if the first codition is not met
+```{r setup, include=FALSE}
+
+#if (this) {
+  #Plan A
+#} else {
+  #Plan B
+#}
+```
+
+#### Is a student passing or failing a class?
+```{r}
+grade = 83
+if(grade > 60){
+  print("You passed!")
+}else{
+  print("You failed...")
+}
+```
+#### Stringing multiple if-else statements together
+```{r}
+a = 1
+b = 1
+if (a > b) {
+  print("A wins!")
+} else if (a < b) {
+  print("B wins!")
+} else {
+  print("Tie.")
+}
+```
+### Exercise 3.2 The doughnut problem
+```{r setup, include=FALSE}
+num_doughnuts = 20
+
+if (num_doughnuts < 12){
+  print('Not a dozen')
+} else if (num_doughnuts == 12){
+  print("A dozen")
+}else if (num_doughnuts > 12 & num_doughnuts < 13){
+  print("More than a dozen")
+} else if (num_doughnuts == 13){
+  print("Baker's dozen")
+} else if (num_doughnuts > 13){
+  print("Hooray!")
+}
+
+```
+
+
+
+
+
+
+
+
+### ifelse()
+```{r}
+# Calculating reciprocals
+# what to do, what to do if test is true, if false
+
+a = 0
+a = c(13, 0, -6, 4)
+reciprocal = NULL
+reciprocal = ifelse(a!=0, 1/a, NA)
+reciprocal
+
+my_data = cbind(a, reciprocal) # gives answer in side by side
+my_data
+```
+
+
+
+
