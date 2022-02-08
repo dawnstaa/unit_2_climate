@@ -1,0 +1,38 @@
+---
+title: "Practice4_staa"
+author: "dawnstaa"
+date: "2/3/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+url = 'ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt'
+co2 = read.table(url, col.names = c("year", "month", "decimal_date", "monthly_average", "deseasonalized", "n_days", "st_dev_days", "monthly_mean_uncertainty"))
+
+co2 = read.table("data/co2_mm_mlo.txt", col.names = c("year", "month", "decimal_date", "monthly_average", "deseasonalized", "n_days", "st_dev_days", "monthly_mean_uncertainty"))
+
+head(co2)
+tail(co2)
+summary(co2)
+range(co2$year)
+
+plot(monthly_average~decimal_date, data=co2, type="l")
+lines(deseasonalized ~ decimal_date, data=co2, type("l")) #not complete
+
+
+plot(seasonal_cycle ~ decimal_date, data=co2, type="l")
+
+my_vector = c(1,3,5,2,4)
+n = length(my_vector)
+my_vector_squared = rep(NA, n)
+for(i in seq(n)){
+  my_vector_squared[i] = my_vector_squared[i]^2
+}
+
+#exercise
+num = 3
+factorial = 1
+for(i in seq(num)){
+  factorial = factorial*i
+  print(factorial)
+}

@@ -102,8 +102,10 @@ plot(detrended_monthly_cycle ~ month, data=co2_monthly_cycle, type="l", )
 
 
 #Exercise 4.1 - Plotting the seasonal cycle of CO2 in 1959 and 2019 (correct or not?)
+pdf("figures/CO2_1959n2019e.pdf", width = 7, height = 5)
 co2_1959 = co2[co2$year == 1959,]
 co2_2019 = co2[co2$year == 2019,]
 plot(seasonal_cycle ~ month, data = co2_1959, type="l", ylim= c(-5,5)) + 
   lines (y=co2_2019$seasonal_cycle, x=co2_2019$month, type="l", col ="cyan")
+dev.off()
 
