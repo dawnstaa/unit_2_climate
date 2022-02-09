@@ -47,16 +47,18 @@ num_factorial
 
 
 #Nested for loops
-mat = matrix(c(4,0,8,7,3,-2), nrow = 2, ncol = 3)
+mat = matrix(c(4,0,8,7,3,-2), nrow = 2, ncol = 3, byrow=T) # fill rows first 'byrow'
 mat_squared = matrix(rep(NA, length(mat)), nrow = 2, ncol = 3)# results matrix
 # writing the for loop to loop through the rows (i) and cols (j) - 2rows,3cols
-for(i in c(1:2)){
-  for(j in c(1:3)){
+for (i in seq(dim(mat)[1])){
+  for (j in seq(dim(mat)[2])){
     mat_squared[i,j] = mat[i,j]^2
+    print(paste("row i=",i," and column j=",j)) 
   }
 }
 
-# to visualize how R accesses the rows and cols in the loop
+
+# to visualize how R accesses the rows and cols in the loop #inner loop to outer loop
 for(i in c(1:2)){
   for(j in c(1:3)){
     print(paste("row i=",i," and column j=",j)) 
@@ -67,8 +69,8 @@ for(i in c(1:2)){
 my_vector^2
 mat^2
 
-#while loop - the while loop codition must be a logical test, if'TRUE' code runs
-#If 'FALSE' loop compltes
+#while loop - the while loop condition must be a logical test, if'TRUE' code runs
+#If 'FALSE' loop completes
 num = -2
 while(num < 0){
   print("One interation of this loop")

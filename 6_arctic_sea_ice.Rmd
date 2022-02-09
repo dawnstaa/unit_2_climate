@@ -49,6 +49,7 @@ head(arctic_ice_annual)
 
 # Hard-coding vs. indexing the years:
 arctic_ice[which(arctic_ice$Year == 1979),'Extent'] # Find the daily data for the first year
+
 arctic_ice_annual$extent_annual_avg[1] = mean(arctic_ice[which(arctic_ice$Year == arctic_ice_annual$Year[1]),'Extent']) # calc and store mean extent for that first year (without hard coding year)
 
 # calculate annual average:
